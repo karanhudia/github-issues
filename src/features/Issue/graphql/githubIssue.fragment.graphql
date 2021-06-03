@@ -1,0 +1,11 @@
+fragment GithubIssue on Issue {
+    number
+    title
+    state
+    bodyHTML
+    comments(first: 10) {
+        nodes {
+            ...GithubIssueComment
+        }
+    }
+}

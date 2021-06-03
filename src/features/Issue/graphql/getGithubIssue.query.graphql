@@ -1,0 +1,7 @@
+query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!) {
+    repository(name: $name, owner: $owner) {
+        issue(number: $issueNumber) {
+            ...GithubIssue
+        }
+    }
+}

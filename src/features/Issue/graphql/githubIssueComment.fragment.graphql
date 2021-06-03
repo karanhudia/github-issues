@@ -1,0 +1,8 @@
+fragment GithubIssueComment on IssueComment {
+    id
+    author {
+        login
+    }
+    bodyHTML
+    createdAt
+}
