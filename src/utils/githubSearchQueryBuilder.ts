@@ -10,7 +10,7 @@ export const githubSearchQueryBuilder = ({
     title?: string;
     body?: string;
     state?: string;
-}) => {
+}): string => {
     let query = `repo:${owner}/${name}`;
 
     if (title) {

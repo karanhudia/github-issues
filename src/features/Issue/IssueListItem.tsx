@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListItem, ListItemText, Typography } from '@material-ui/core';
-import { GithubIssueCommentFragment, IssueComment } from '../../generated/graphql';
+import { GithubIssueCommentFragment } from '../../generated/graphql';
 
 export const IssueListItem = ({ __typename, id, author, createdAt, bodyHTML }: GithubIssueCommentFragment) => {
     if (__typename !== 'IssueComment') {
