@@ -1,0 +1,11 @@
+query SearchGithubRepository($query: String!) {
+    search(first: 3, query: $query, type: REPOSITORY) {
+        edges {
+            node {
+                ... on Repository {
+                    ...GithubRepository
+                }
+            }
+        }
+    }
+}

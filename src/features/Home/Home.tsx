@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import { Search } from '../Search/Search';
+import { SearchRepository } from '../Repository/SearchRepository';
 
 export const Home = () => {
     return (
@@ -9,7 +9,7 @@ export const Home = () => {
             <Typography variant="caption">
                 You can use the search bar below to search for github repositories
             </Typography>
-            <Search label="Find your repo" />
+            <SearchRepository label="Find your repo" />
         </div>
     );
 };

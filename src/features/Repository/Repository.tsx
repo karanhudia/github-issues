@@ -2,7 +2,7 @@ import React from 'react';
 import { useGetGithubRepositoryQuery } from '../../generated/graphql';
 import { useRouteMatch } from 'react-router';
 import { Card, CardHeader, Grid, LinearProgress } from '@material-ui/core';
-import { SearchIssues } from '../Search/SearchIssues';
+import { SearchIssues } from '../Issue/SearchIssues';
 import { Error } from '../Error/Error';
 
 export const Repository = () => {
