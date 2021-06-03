@@ -1,26 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { AuthenticatedApi } from './features/Api/AuthenticatedApi';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import { MainLayoutRoute } from './features/LayoutRoutes/MainLayoutRoute';
+import { Home } from './features/Home/Home';
+import { Routes } from './constants/Routes';
+import { Repository } from './features/Repository/Repository';
+import { IssueContainer } from './features/Issue/IssueContainer';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <AuthenticatedApi>
+            <BrowserRouter>
+                <Switch>
+                    <MainLayoutRoute exact path={Routes.Home} component={Home} />
+                </Switch>
+                <Switch>
+                    <MainLayoutRoute exact path={Routes.Repository} component={Repository} />
+                </Switch>
+                <Switch>
+                    <MainLayoutRoute exact path={Routes.Issues} component={IssueContainer} />
+                </Switch>
+            </BrowserRouter>
+        </AuthenticatedApi>
+    );
 }
 
 export default App;

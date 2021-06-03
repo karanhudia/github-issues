@@ -26,6 +26,7 @@ module.exports = {
                 'named-operations-object',
             ],
             config: {
+                avoidOptionals: true,
                 skipTypename: false,
                 withHooks: true,
                 withHOC: false,
