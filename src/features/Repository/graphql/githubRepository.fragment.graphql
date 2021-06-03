@@ -1,0 +1,5 @@
+fragment GithubRepository on Repository {
+    id
+    nameWithOwner
+    url
+}

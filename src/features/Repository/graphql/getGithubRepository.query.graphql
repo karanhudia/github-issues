@@ -1,0 +1,5 @@
+query GetGithubRepository($name: String!, $owner: String!) {
+    repository(name: $name, owner: $owner) {
+        ...GithubRepository
+    }
+}
