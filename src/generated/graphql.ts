@@ -21085,7 +21085,7 @@ export type GithubIssueFragment = (
 
 export type GithubIssueCommentFragment = (
   { __typename?: 'IssueComment' }
-  & Pick<IssueComment, 'id' | 'bodyHTML' | 'createdAt'>
+  & Pick<IssueComment, 'id' | 'bodyHTML' | 'body' | 'createdAt'>
   & { author: Maybe<(
     { __typename?: 'Bot' }
     & Pick<Bot, 'login'>
@@ -21191,6 +21191,7 @@ export const GithubIssueCommentFragmentDoc = gql`
     login
   }
   bodyHTML
+  body
   createdAt
 }
     `;
