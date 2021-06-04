@@ -4,6 +4,7 @@ import { GithubRepositoryFragment, useSearchGithubRepositoryQuery } from '../../
 import { ListItem, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
 import WebAssetIcon from '@material-ui/icons/WebAsset';
 import { useHistory } from 'react-router-dom';
+import { DataCypress } from '../../constants/DataCypress';
 
 type SearchProps = {
     label: string;
@@ -59,9 +60,11 @@ export const SearchRepository = ({ label }: SearchProps) => {
             onInputChange={(_event, newInputValue) => {
                 setInputValue(newInputValue);
             }}
-            renderInput={(params) => <TextField {...params} label={label} fullWidth />}
+            renderInput={(params) => (
+                <TextField {...params} label={label} fullWidth data-cy={DataCypress.SearchRepositoryInputField} />
+            )}
             renderOption={(option: GithubRepositoryFragment) => (
-                <ListItem>
+                <ListItem data-cy={DataCypress.SearchRepositoryResultItem}>
                     <ListItemIcon>
                         <WebAssetIcon />
                     </ListItemIcon>

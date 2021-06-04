@@ -15,7 +15,7 @@ import {
     Theme,
 } from '@material-ui/core';
 import { Error } from '../Error/Error';
-import { IssueListItem } from './IssueListItem';
+import { IssueCommentListItem } from './IssueCommentListItem';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -69,7 +69,7 @@ export const IssueContainer = () => {
 
                                 return (
                                     <>
-                                        <IssueListItem {...node} />
+                                        <IssueCommentListItem {...node} />
                                         {comments.nodes?.length !== i + 1 && <Divider component="li" />}
                                     </>
                                 );

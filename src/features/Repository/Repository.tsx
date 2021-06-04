@@ -4,6 +4,7 @@ import { useRouteMatch } from 'react-router';
 import { Card, CardHeader, Grid, LinearProgress } from '@material-ui/core';
 import { SearchIssues } from '../Issue/SearchIssues';
 import { Error } from '../Error/Error';
+import { DataCypress } from '../../constants/DataCypress';
 
 export const Repository = () => {
     const { params } = useRouteMatch<{ owner: string; name: string }>();
@@ -22,6 +23,7 @@ export const Repository = () => {
                     <CardHeader
                         title={data?.repository?.nameWithOwner}
                         subheader="You can search for issues within this repository"
+                        data-cy={DataCypress.SearchRepositoryHeaderText}
                     />
                 </Card>
             </Grid>
