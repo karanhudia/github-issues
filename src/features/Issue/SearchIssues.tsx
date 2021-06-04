@@ -15,6 +15,7 @@ import {
     ListItemText,
     makeStyles,
     Theme,
+    Typography,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { SearchIssueForm, SearchIssueFormDataType } from './SearchIssueForm';
@@ -59,32 +60,40 @@ export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
             </Grid>
             <Grid item xs={12}>
                 {!loading && called && !error && data?.search.edges && (
-                    <Box boxShadow={2}>
-                        <List className={classes.root} disablePadding={true}>
-                            {data.search.edges.map((result, i) => {
-                                return result?.node && result.node.__typename === 'Issue' ? (
-                                    <>
-                                        <ListItem
-                                            key={i}
-                                            button
-                                            component={Link}
-                                            to={`${url}/issues/${result.node.number}`}
-                                        >
-                                            <ListItemText>{result.node.title}</ListItemText>
-                                            <ListItemSecondaryAction>
-                                                <Badge badgeContent={result.node.comments.totalCount} color="primary">
-                                                    <ChatBubbleOutlineIcon />
-                                                </Badge>
-                                            </ListItemSecondaryAction>
-                                        </ListItem>
-                                        {data.search.edges?.length !== i + 1 && <Divider component="li" />}
-                                    </>
-                                ) : (
-                                    <></>
-                                );
-                            })}
-                        </List>
-                    </Box>
+                    <>
+                        <Box paddingBottom={1} paddingLeft={2}>
+                            <Typography variant="h5">Issues found</Typography>
+                        </Box>
+                        <Box boxShadow={2}>
+                            <List className={classes.root} disablePadding={true}>
+                                {data.search.edges.map((result, i) => {
+                                    return result?.node && result.node.__typename === 'Issue' ? (
+                                        <>
+                                            <ListItem
+                                                key={i}
+                                                button
+                                                component={Link}
+                                                to={`${url}/issues/${result.node.number}`}
+                                            >
+                                                <ListItemText>{result.node.title}</ListItemText>
+                                                <ListItemSecondaryAction>
+                                                    <Badge
+                                                        badgeContent={result.node.comments.totalCount}
+                                                        color="primary"
+                                                    >
+                                                        <ChatBubbleOutlineIcon />
+                                                    </Badge>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                            {data.search.edges?.length !== i + 1 && <Divider component="li" />}
+                                        </>
+                                    ) : (
+                                        <></>
+                                    );
+                                })}
+                            </List>
+                        </Box>
+                    </>
                 )}
             </Grid>
         </Grid>
