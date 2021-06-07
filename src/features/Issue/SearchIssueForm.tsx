@@ -22,15 +22,15 @@ export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
                 <Grid item xs={4}>
-                    <TextField label="Title" fullWidth {...register('title')} />
+                    <TextField label={t('issues.formTitle')} fullWidth {...register('title')} />
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField label="Body" fullWidth {...register('body')} />
+                    <TextField label={t('issues.formBody')} fullWidth {...register('body')} />
                 </Grid>
                 <Grid item xs={4}>
                     <FormControl fullWidth={true}>
                         <InputLabel id="issue-state" shrink={true}>
-                            State
+                            {t('issues.formState')}
                         </InputLabel>
                         <Select
                             displayEmpty={true}
