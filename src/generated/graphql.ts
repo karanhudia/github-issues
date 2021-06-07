@@ -21104,6 +21104,30 @@ export type GithubIssueCommentFragment = (
   )> }
 );
 
+export type SearchGithubIssueItemFragment = (
+  { __typename?: 'Issue' }
+  & Pick<Issue, 'id' | 'title' | 'body' | 'number'>
+  & { author: Maybe<(
+    { __typename?: 'Bot' }
+    & Pick<Bot, 'login'>
+  ) | (
+    { __typename?: 'EnterpriseUserAccount' }
+    & Pick<EnterpriseUserAccount, 'login'>
+  ) | (
+    { __typename?: 'Mannequin' }
+    & Pick<Mannequin, 'login'>
+  ) | (
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'login'>
+  ) | (
+    { __typename?: 'User' }
+    & Pick<User, 'login'>
+  )>, comments: (
+    { __typename?: 'IssueCommentConnection' }
+    & Pick<IssueCommentConnection, 'totalCount'>
+  ) }
+);
+
 export type SearchGithubIssuesQueryVariables = Exact<{
   query: Scalars['String'];
 }>;
@@ -21117,26 +21141,7 @@ export type SearchGithubIssuesQuery = (
       { __typename?: 'SearchResultItemEdge' }
       & { node: Maybe<{ __typename?: 'App' } | { __typename?: 'Discussion' } | (
         { __typename?: 'Issue' }
-        & Pick<Issue, 'id' | 'title' | 'body' | 'number'>
-        & { author: Maybe<(
-          { __typename?: 'Bot' }
-          & Pick<Bot, 'login'>
-        ) | (
-          { __typename?: 'EnterpriseUserAccount' }
-          & Pick<EnterpriseUserAccount, 'login'>
-        ) | (
-          { __typename?: 'Mannequin' }
-          & Pick<Mannequin, 'login'>
-        ) | (
-          { __typename?: 'Organization' }
-          & Pick<Organization, 'login'>
-        ) | (
-          { __typename?: 'User' }
-          & Pick<User, 'login'>
-        )>, comments: (
-          { __typename?: 'IssueCommentConnection' }
-          & Pick<IssueCommentConnection, 'totalCount'>
-        ) }
+        & SearchGithubIssueItemFragment
       ) | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | { __typename?: 'User' }> }
     )>>> }
   ) }
@@ -21207,6 +21212,20 @@ export const GithubIssueFragmentDoc = gql`
   }
 }
     ${GithubIssueCommentFragmentDoc}`;
+export const SearchGithubIssueItemFragmentDoc = gql`
+    fragment SearchGithubIssueItem on Issue {
+  id
+  title
+  body
+  author {
+    login
+  }
+  number
+  comments {
+    totalCount
+  }
+}
+    `;
 export const GithubRepositoryFragmentDoc = gql`
     fragment GithubRepository on Repository {
   id
@@ -21261,22 +21280,13 @@ export const SearchGithubIssuesDocument = gql`
     edges {
       node {
         ... on Issue {
-          id
-          title
-          body
-          author {
-            login
-          }
-          number
-          comments {
-            totalCount
-          }
+          ...SearchGithubIssueItem
         }
       }
     }
   }
 }
-    `;
+    ${SearchGithubIssueItemFragmentDoc}`;
 
 /**
  * __useSearchGithubIssuesQuery__
@@ -21392,6 +21402,7 @@ export const namedOperations = {
   Fragment: {
     GithubIssue: 'GithubIssue',
     GithubIssueComment: 'GithubIssueComment',
+    SearchGithubIssueItem: 'SearchGithubIssueItem',
     GithubRepository: 'GithubRepository'
   }
 }

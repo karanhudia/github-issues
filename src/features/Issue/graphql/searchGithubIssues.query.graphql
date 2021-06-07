@@ -3,16 +3,7 @@ query SearchGithubIssues($query: String!) {
         edges {
             node {
                 ... on Issue {
-                    id
-                    title
-                    body
-                    author {
-                        login
-                    }
-                    number
-                    comments {
-                        totalCount
-                    }
+                    ...SearchGithubIssueItem
                 }
             }
         }
