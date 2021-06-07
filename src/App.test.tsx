@@ -2,8 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders app with header github issues', () => {
     render(<App />);
-    const linkElement = screen.getByText(/learn react/i);
-    expect(linkElement).toBeInTheDocument();
+    const headerTitleElement = screen.getByText(/^Github Issues$/);
+    expect(headerTitleElement).toBeInTheDocument();
 });
