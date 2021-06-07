@@ -1,0 +1,15 @@
+{
+  "buttons": {
+    "search": "Search"
+  },
+  "issues": {
+    "issuesCount": "Issues Count: {{count}}"
+  },
+  "home": {
+    "heading": "Welcome to Github Issues!",
+    "body": "You can use the search bar below to search for github repositories."
+  },
+  "repository": {
+    "searchLabel": "Type the repository name"
+  }
+}
