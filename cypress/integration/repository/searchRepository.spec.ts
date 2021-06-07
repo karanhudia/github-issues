@@ -11,7 +11,7 @@ describe('Searching for repositories', () => {
         cy.get('.MuiAutocomplete-option').should('have.length', 3);
     });
 
-    it('should go to facebook/react repository and search for issues', () => {
+    it('should go to facebook/react repository by url', () => {
         cy.visit('/repository/facebook/react');
         cy.get(`[data-cy=${DataCypress.SearchRepositoryHeaderText}]`).should('exist').contains('facebook/react');
     });

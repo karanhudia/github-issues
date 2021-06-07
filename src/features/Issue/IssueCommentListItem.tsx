@@ -12,7 +12,7 @@ export const IssueCommentListItem = ({ __typename, id, author, createdAt, bodyHT
     }
 
     return (
-        <ListItem key={id} data-cy={DataCypress.SearchRepositoryResultItem}>
+        <ListItem key={id} data-cy={DataCypress.IssueComment}>
             <ListItemText
                 primary={
                     <Typography

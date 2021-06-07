@@ -3,6 +3,7 @@ import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } fr
 import { useForm } from 'react-hook-form';
 import { IssueState } from '../../generated/graphql';
 import { useTranslation } from 'react-i18next';
+import { DataCypress } from '../../constants/DataCypress';
 
 export type SearchIssueFormDataType = {
     title: string;
@@ -36,6 +37,7 @@ export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
                             displayEmpty={true}
                             labelId="issue-state"
                             onChange={(e) => setValue('state', e.target.value)}
+                            data-cy={DataCypress.SearchIssuesStateDropdown}
                         >
                             <MenuItem value="">All</MenuItem>
                             <MenuItem value={IssueState.Open}>{IssueState.Open}</MenuItem>
@@ -44,7 +46,12 @@ export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    <Button type="submit" color="secondary" variant="contained">
+                    <Button
+                        type="submit"
+                        color="secondary"
+                        variant="contained"
+                        data-cy={DataCypress.SearchIssuesButton}
+                    >
                         {t('buttons.search')}
                     </Button>
                 </Grid>

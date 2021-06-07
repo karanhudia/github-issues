@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core';
 import { Error } from '../Error/Error';
 import { IssueCommentListItem } from './IssueCommentListItem';
+import { DataCypress } from '../../constants/DataCypress';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,11 +51,12 @@ export const IssueContainer = () => {
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Card>
-                    <CardHeader title={title} subheader={state} />
+                    <CardHeader title={title} subheader={state} data-cy={DataCypress.IssueTitle} />
                     <CardContent
                         dangerouslySetInnerHTML={{
                             __html: bodyHTML,
                         }}
+                        data-cy={DataCypress.IssueBody}
                     />
                 </Card>
             </Grid>
