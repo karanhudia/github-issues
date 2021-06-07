@@ -1,11 +1,5 @@
 fragment SearchGithubIssueItem on Issue {
-    id
-    title
-    body
-    author {
-        login
-    }
-    number
+    ...GithubIssue
     comments {
         totalCount
     }

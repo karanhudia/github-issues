@@ -21057,6 +21057,7 @@ export type GetGithubIssueQueryVariables = Exact<{
   name: Scalars['String'];
   owner: Scalars['String'];
   issueNumber: Scalars['Int'];
+  cursor: Maybe<Scalars['String']>;
 }>;
 
 
@@ -21066,6 +21067,20 @@ export type GetGithubIssueQuery = (
     { __typename?: 'Repository' }
     & { issue: Maybe<(
       { __typename?: 'Issue' }
+      & { comments: (
+        { __typename?: 'IssueCommentConnection' }
+        & Pick<IssueCommentConnection, 'totalCount'>
+        & { edges: Maybe<Array<Maybe<(
+          { __typename?: 'IssueCommentEdge' }
+          & { node: Maybe<(
+            { __typename?: 'IssueComment' }
+            & GithubIssueCommentFragment
+          )> }
+        )>>>, pageInfo: (
+          { __typename?: 'PageInfo' }
+          & Pick<PageInfo, 'endCursor' | 'hasNextPage'>
+        ) }
+      ) }
       & GithubIssueFragment
     )> }
   )> }
@@ -21073,14 +21088,23 @@ export type GetGithubIssueQuery = (
 
 export type GithubIssueFragment = (
   { __typename?: 'Issue' }
-  & Pick<Issue, 'number' | 'title' | 'state' | 'bodyHTML'>
-  & { comments: (
-    { __typename?: 'IssueCommentConnection' }
-    & { nodes: Maybe<Array<Maybe<(
-      { __typename?: 'IssueComment' }
-      & GithubIssueCommentFragment
-    )>>> }
-  ) }
+  & Pick<Issue, 'id' | 'number' | 'title' | 'state' | 'bodyHTML'>
+  & { author: Maybe<(
+    { __typename?: 'Bot' }
+    & Pick<Bot, 'login'>
+  ) | (
+    { __typename?: 'EnterpriseUserAccount' }
+    & Pick<EnterpriseUserAccount, 'login'>
+  ) | (
+    { __typename?: 'Mannequin' }
+    & Pick<Mannequin, 'login'>
+  ) | (
+    { __typename?: 'Organization' }
+    & Pick<Organization, 'login'>
+  ) | (
+    { __typename?: 'User' }
+    & Pick<User, 'login'>
+  )> }
 );
 
 export type GithubIssueCommentFragment = (
@@ -21106,26 +21130,11 @@ export type GithubIssueCommentFragment = (
 
 export type SearchGithubIssueItemFragment = (
   { __typename?: 'Issue' }
-  & Pick<Issue, 'id' | 'title' | 'body' | 'number'>
-  & { author: Maybe<(
-    { __typename?: 'Bot' }
-    & Pick<Bot, 'login'>
-  ) | (
-    { __typename?: 'EnterpriseUserAccount' }
-    & Pick<EnterpriseUserAccount, 'login'>
-  ) | (
-    { __typename?: 'Mannequin' }
-    & Pick<Mannequin, 'login'>
-  ) | (
-    { __typename?: 'Organization' }
-    & Pick<Organization, 'login'>
-  ) | (
-    { __typename?: 'User' }
-    & Pick<User, 'login'>
-  )>, comments: (
+  & { comments: (
     { __typename?: 'IssueCommentConnection' }
     & Pick<IssueCommentConnection, 'totalCount'>
   ) }
+  & GithubIssueFragment
 );
 
 export type SearchGithubIssuesQueryVariables = Exact<{
@@ -21201,31 +21210,24 @@ export const GithubIssueCommentFragmentDoc = gql`
     `;
 export const GithubIssueFragmentDoc = gql`
     fragment GithubIssue on Issue {
+  id
   number
   title
   state
   bodyHTML
-  comments(first: 10) {
-    nodes {
-      ...GithubIssueComment
-    }
-  }
-}
-    ${GithubIssueCommentFragmentDoc}`;
-export const SearchGithubIssueItemFragmentDoc = gql`
-    fragment SearchGithubIssueItem on Issue {
-  id
-  title
-  body
   author {
     login
   }
-  number
+}
+    `;
+export const SearchGithubIssueItemFragmentDoc = gql`
+    fragment SearchGithubIssueItem on Issue {
+  ...GithubIssue
   comments {
     totalCount
   }
 }
-    `;
+    ${GithubIssueFragmentDoc}`;
 export const GithubRepositoryFragmentDoc = gql`
     fragment GithubRepository on Repository {
   id
@@ -21236,14 +21238,27 @@ export const GithubRepositoryFragmentDoc = gql`
 }
     `;
 export const GetGithubIssueDocument = gql`
-    query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!) {
+    query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $cursor: String) {
   repository(name: $name, owner: $owner) {
     issue(number: $issueNumber) {
       ...GithubIssue
+      comments(first: 10, after: $cursor) {
+        edges {
+          node {
+            ...GithubIssueComment
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+        totalCount
+      }
     }
   }
 }
-    ${GithubIssueFragmentDoc}`;
+    ${GithubIssueFragmentDoc}
+${GithubIssueCommentFragmentDoc}`;
 
 /**
  * __useGetGithubIssueQuery__
@@ -21260,6 +21275,7 @@ export const GetGithubIssueDocument = gql`
  *      name: // value for 'name'
  *      owner: // value for 'owner'
  *      issueNumber: // value for 'issueNumber'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */

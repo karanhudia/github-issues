@@ -1,7 +1,19 @@
-query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!) {
+query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $cursor: String) {
     repository(name: $name, owner: $owner) {
         issue(number: $issueNumber) {
             ...GithubIssue
+            comments(first: 10, after: $cursor) {
+                edges {
+                    node {
+                        ...GithubIssueComment
+                    }
+                }
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+                totalCount
+            }
         }
     }
 }
