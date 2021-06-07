@@ -9,8 +9,8 @@ test('renders home component', () => {
             <Home />
         </AuthenticatedApi>,
     );
-    const header = screen.getByText(/^Welcome to github issues!$/);
-    const body = screen.getByText(/^You can use the search bar below to search for github repositories$/);
+    const header = screen.getByText(/^home.heading$/);
+    const body = screen.getByText(/^home.body$/);
 
     expect(header).toBeInTheDocument();
     expect(body).toBeInTheDocument();
