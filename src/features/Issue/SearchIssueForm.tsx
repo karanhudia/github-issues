@@ -1,10 +1,11 @@
 import React from 'react';
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
+import { IssueState } from '../../generated/graphql';
 
 export type SearchIssueFormDataType = {
     title: string;
-    status: string;
+    state: string;
     body: string;
 };
 
@@ -13,7 +14,7 @@ type SearchIssueFormType = {
 };
 
 export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, setValue } = useForm();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -25,7 +26,20 @@ export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
                     <TextField label="Body" fullWidth {...register('body')} />
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField label="Status" fullWidth {...register('status')} />
+                    <FormControl fullWidth={true}>
+                        <InputLabel id="issue-state" shrink={true}>
+                            State
+                        </InputLabel>
+                        <Select
+                            displayEmpty={true}
+                            labelId="issue-state"
+                            onChange={(e) => setValue('state', e.target.value)}
+                        >
+                            <MenuItem value="">All</MenuItem>
+                            <MenuItem value={IssueState.Open}>{IssueState.Open}</MenuItem>
+                            <MenuItem value={IssueState.Closed}>{IssueState.Closed}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     <Button type="submit" color="secondary" variant="contained">
