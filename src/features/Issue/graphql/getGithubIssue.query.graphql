@@ -1,8 +1,8 @@
-query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $cursor: String) {
+query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $totalComments: Int!) {
     repository(name: $name, owner: $owner) {
         issue(number: $issueNumber) {
             ...GithubIssue
-            comments(first: 10, after: $cursor) {
+            comments(first: $totalComments) {
                 edges {
                     node {
                         ...GithubIssueComment

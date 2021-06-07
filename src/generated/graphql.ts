@@ -21057,7 +21057,7 @@ export type GetGithubIssueQueryVariables = Exact<{
   name: Scalars['String'];
   owner: Scalars['String'];
   issueNumber: Scalars['Int'];
-  cursor: Maybe<Scalars['String']>;
+  totalComments: Scalars['Int'];
 }>;
 
 
@@ -21238,11 +21238,11 @@ export const GithubRepositoryFragmentDoc = gql`
 }
     `;
 export const GetGithubIssueDocument = gql`
-    query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $cursor: String) {
+    query GetGithubIssue($name: String!, $owner: String!, $issueNumber: Int!, $totalComments: Int!) {
   repository(name: $name, owner: $owner) {
     issue(number: $issueNumber) {
       ...GithubIssue
-      comments(first: 10, after: $cursor) {
+      comments(first: $totalComments) {
         edges {
           node {
             ...GithubIssueComment
@@ -21275,7 +21275,7 @@ ${GithubIssueCommentFragmentDoc}`;
  *      name: // value for 'name'
  *      owner: // value for 'owner'
  *      issueNumber: // value for 'issueNumber'
- *      cursor: // value for 'cursor'
+ *      totalComments: // value for 'totalComments'
  *   },
  * });
  */

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouteMatch } from 'react-router';
 import { useGetGithubIssueQuery } from '../../generated/graphql';
 import {
     Box,
+    Button,
     Card,
     CardContent,
     CardHeader,
@@ -30,11 +31,14 @@ export const IssueContainer = () => {
     const classes = useStyles();
     const { params } = useRouteMatch<{ owner: string; name: string; issueNumber: string }>();
 
-    const { data, error, loading } = useGetGithubIssueQuery({
+    const [numberOfComments, setNumberOfComments] = useState<number>(10);
+
+    const { data, error, loading, refetch } = useGetGithubIssueQuery({
         variables: {
             owner: params.owner,
             name: params.name,
             issueNumber: +params.issueNumber,
+            totalComments: numberOfComments,
         },
     });
 
@@ -46,6 +50,14 @@ export const IssueContainer = () => {
     }
 
     const { title, state, bodyHTML, comments } = data.repository.issue;
+
+    const handleSeeMoreButton = () => {
+        refetch({
+            totalComments: numberOfComments + 10,
+        });
+
+        setNumberOfComments(numberOfComments + 10);
+    };
 
     return (
         <Grid container spacing={2}>
@@ -63,22 +75,29 @@ export const IssueContainer = () => {
             <Grid item xs={12}>
                 <Box boxShadow={2}>
                     <List className={classes.root} disablePadding={true}>
-                        {comments.nodes &&
-                            comments.nodes.map((node, i) => {
-                                if (!node) {
+                        {comments.edges &&
+                            comments.edges.map((edge, i) => {
+                                if (!edge?.node) {
                                     return <></>;
                                 }
 
                                 return (
                                     <>
-                                        <IssueCommentListItem {...node} />
-                                        {comments.nodes?.length !== i + 1 && <Divider component="li" />}
+                                        <IssueCommentListItem {...edge.node} />
+                                        {comments.edges?.length !== i + 1 && <Divider component="li" />}
                                     </>
                                 );
                             })}
                     </List>
                 </Box>
             </Grid>
+            {data.repository.issue.comments.pageInfo.hasNextPage && (
+                <Grid item xs={12}>
+                    <Button color="secondary" variant="contained" fullWidth={true} onClick={handleSeeMoreButton}>
+                        See more
+                    </Button>
+                </Grid>
+            )}
         </Grid>
     );
 };
