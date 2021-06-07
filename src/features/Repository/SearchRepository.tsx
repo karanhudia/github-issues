@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import { Autocomplete } from '@material-ui/lab';
 import { GithubRepositoryFragment, useSearchGithubRepositoryQuery } from '../../generated/graphql';
-import { ListItem, ListItemIcon, ListItemText, TextField } from '@material-ui/core';
-import WebAssetIcon from '@material-ui/icons/WebAsset';
+import { TextField } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { DataCypress } from '../../constants/DataCypress';
+import { useTranslation } from 'react-i18next';
+import { SearchRepositoryListItem } from './SearchRepositoryListItem';
 
-type SearchProps = {
-    label: string;
-};
-
-export const SearchRepository = ({ label }: SearchProps) => {
+export const SearchRepository = () => {
     const history = useHistory();
+    const { t } = useTranslation();
 
     const [value, setValue] = React.useState<GithubRepositoryFragment | null>(null);
     const [inputValue, setInputValue] = React.useState('');
@@ -48,7 +46,7 @@ export const SearchRepository = ({ label }: SearchProps) => {
             filterSelectedOptions
             getOptionSelected={(option) => option.nameWithOwner === inputValue}
             value={value}
-            onChange={(_event, newValue: GithubRepositoryFragment | null) => {
+            onChange={(_e, newValue: GithubRepositoryFragment | null) => {
                 setValue(newValue);
 
                 if (newValue) {
@@ -57,23 +55,18 @@ export const SearchRepository = ({ label }: SearchProps) => {
                     history.push(`/repository/${newValue.nameWithOwner}`);
                 }
             }}
-            onInputChange={(_event, newInputValue) => {
+            onInputChange={(_e, newInputValue) => {
                 setInputValue(newInputValue);
             }}
             renderInput={(params) => (
-                <TextField {...params} label={label} fullWidth data-cy={DataCypress.SearchRepositoryInputField} />
+                <TextField
+                    {...params}
+                    label={t('repository.searchLabel')}
+                    fullWidth
+                    data-cy={DataCypress.SearchRepositoryInputField}
+                />
             )}
-            renderOption={(option: GithubRepositoryFragment) => (
-                <ListItem data-cy={DataCypress.SearchRepositoryResultItem}>
-                    <ListItemIcon>
-                        <WebAssetIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={option.nameWithOwner}
-                        secondary={`Active issues count: ${option.issues.totalCount}`}
-                    />
-                </ListItem>
-            )}
+            renderOption={(option: GithubRepositoryFragment) => <SearchRepositoryListItem {...option} />}
         />
     );
 };

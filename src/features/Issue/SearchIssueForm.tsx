@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
 import { useForm } from 'react-hook-form';
 import { IssueState } from '../../generated/graphql';
+import { useTranslation } from 'react-i18next';
 
 export type SearchIssueFormDataType = {
     title: string;
@@ -15,6 +16,7 @@ type SearchIssueFormType = {
 
 export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
     const { register, handleSubmit, setValue } = useForm();
+    const { t } = useTranslation();
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -43,7 +45,7 @@ export const SearchIssueForm = ({ onSubmit }: SearchIssueFormType) => {
                 </Grid>
                 <Grid item xs={12}>
                     <Button type="submit" color="secondary" variant="contained">
-                        Search
+                        {t('buttons.search')}
                     </Button>
                 </Grid>
             </Grid>

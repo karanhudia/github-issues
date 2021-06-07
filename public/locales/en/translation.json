@@ -2,14 +2,25 @@
   "buttons": {
     "search": "Search"
   },
+  "header": {
+    "title": "Github Issues"
+  },
   "issues": {
-    "issuesCount": "Issues Count: {{count}}"
+    "title": "Issues",
+    "issuesFound": "Issues found",
+    "issuesCount": "Issues Count: {{count}}",
+    "commentedAt": "<strong>{{user}}</strong> commented this at <strong>{{time}}</strong>"
   },
   "home": {
     "heading": "Welcome to Github Issues!",
     "body": "You can use the search bar below to search for github repositories."
   },
   "repository": {
-    "searchLabel": "Type the repository name"
+    "searchLabel": "Type the repository name",
+    "subHeading": "You can search for issues within this repository."
+  },
+  "error": {
+    "title": "Sorry! The schema could not be loaded.",
+    "subheader": "There was some error while making the graphql request."
   }
 }

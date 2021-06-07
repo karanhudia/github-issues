@@ -22,6 +22,7 @@ import { SearchIssueForm, SearchIssueFormDataType } from './SearchIssueForm';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import { useRouteMatch } from 'react-router';
 import { githubSearchQueryBuilder } from '../../utils/githubSearchQueryBuilder';
+import { useTranslation } from 'react-i18next';
 
 type SearchIssuesProps = {
     owner: string;
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
+    const { t } = useTranslation();
     const { url } = useRouteMatch();
     const classes = useStyles();
 
@@ -52,7 +54,7 @@ export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
         <Grid container spacing={2}>
             <Grid item xs={12}>
                 <Card>
-                    <CardHeader title="Issues" />
+                    <CardHeader title={t('issues.title')} />
                     <CardContent>
                         <SearchIssueForm onSubmit={handleSearchIssues} />
                     </CardContent>
@@ -62,7 +64,7 @@ export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
                 {!loading && called && !error && data?.search.edges && (
                     <>
                         <Box paddingBottom={1} paddingLeft={2}>
-                            <Typography variant="h5">Issues found</Typography>
+                            <Typography variant="h5">{t('issues.issuesFound')}</Typography>
                         </Box>
                         <Box boxShadow={2}>
                             <List className={classes.root} disablePadding={true}>
