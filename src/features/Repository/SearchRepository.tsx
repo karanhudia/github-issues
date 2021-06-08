@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Autocomplete } from '@material-ui/lab';
-import { GithubRepositoryFragment, useSearchGithubRepositoryQuery } from '../../generated/graphql';
+import { GithubRepositoryFragment, useSearchGithubRepositoryLazyQuery } from '../../generated/graphql';
 import { TextField } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { DataCypress } from '../../constants/DataCypress';
@@ -14,27 +14,21 @@ export const SearchRepository = () => {
     const [value, setValue] = React.useState<GithubRepositoryFragment | null>(null);
     const [inputValue, setInputValue] = React.useState('');
     const [options, setOptions] = React.useState<GithubRepositoryFragment[]>([]);
-    const { refetch } = useSearchGithubRepositoryQuery({
+    const [searchGithubRepository, { loading }] = useSearchGithubRepositoryLazyQuery({
         variables: { query: '' },
-        fetchPolicy: 'cache-first',
+        onCompleted: (data) => {
+            if (data.search.edges) {
+                const validOptions = data.search.edges.map((edge) => {
+                    if (edge && edge.node && edge.node.__typename === 'Repository') {
+                        return edge.node;
+                    } else {
+                        return {} as GithubRepositoryFragment;
+                    }
+                });
+                setOptions(validOptions);
+            }
+        },
     });
-
-    useEffect(() => {
-        refetch({ query: inputValue })
-            .then((response) => {
-                if (response.data.search.edges) {
-                    const validOptions = response.data.search.edges.map((edge) => {
-                        if (edge && edge.node && edge.node.__typename === 'Repository') {
-                            return edge.node;
-                        } else {
-                            return {} as GithubRepositoryFragment;
-                        }
-                    });
-                    setOptions(validOptions);
-                }
-            })
-            .catch((error) => console.log(error));
-    }, [inputValue]);
 
     return (
         <Autocomplete
@@ -46,6 +40,8 @@ export const SearchRepository = () => {
             filterSelectedOptions
             getOptionSelected={(option) => option.nameWithOwner === inputValue}
             value={value}
+            loading={loading}
+            loadingText={t('repository.searching')}
             onChange={(_e, newValue: GithubRepositoryFragment | null) => {
                 setValue(newValue);
 
@@ -57,6 +53,12 @@ export const SearchRepository = () => {
             }}
             onInputChange={(_e, newInputValue) => {
                 setInputValue(newInputValue);
+
+                searchGithubRepository({
+                    variables: {
+                        query: newInputValue,
+                    },
+                });
             }}
             renderInput={(params) => (
                 <TextField

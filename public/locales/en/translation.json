@@ -20,6 +20,7 @@
     "body": "You can use the search bar below to search for github repositories."
   },
   "repository": {
+    "searching": "Searching...",
     "searchLabel": "Type the repository name",
     "subHeading": "You can search for issues within this repository."
   },
