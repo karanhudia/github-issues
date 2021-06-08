@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { DataCypress } from '../../constants/DataCypress';
 import { useTranslation } from 'react-i18next';
 import { SearchRepositoryListItem } from './SearchRepositoryListItem';
+import { NodeBuilderEdge, validNodeBuilder } from '../../utils/validNodeBuilder';
 
 export const SearchRepository = () => {
     const history = useHistory();
@@ -18,13 +19,10 @@ export const SearchRepository = () => {
         variables: { query: '' },
         onCompleted: (data) => {
             if (data.search.edges) {
-                const validOptions = data.search.edges.map((edge) => {
-                    if (edge && edge.node && edge.node.__typename === 'Repository') {
-                        return edge.node;
-                    } else {
-                        return {} as GithubRepositoryFragment;
-                    }
-                });
+                const validOptions = validNodeBuilder<GithubRepositoryFragment>(
+                    data.search.edges as NodeBuilderEdge<GithubRepositoryFragment>[],
+                    'Repository',
+                );
                 setOptions(validOptions);
             }
         },

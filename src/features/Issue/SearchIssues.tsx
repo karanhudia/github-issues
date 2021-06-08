@@ -1,43 +1,20 @@
 import React from 'react';
-import { useSearchGithubIssuesLazyQuery } from '../../generated/graphql';
-import {
-    Box,
-    Card,
-    CardContent,
-    CardHeader,
-    createStyles,
-    Divider,
-    Grid,
-    LinearProgress,
-    List,
-    makeStyles,
-    Theme,
-    Typography,
-} from '@material-ui/core';
+import { SearchGithubIssueItemFragment, useSearchGithubIssuesLazyQuery } from '../../generated/graphql';
+import { Box, Card, CardContent, CardHeader, Grid, LinearProgress, Typography } from '@material-ui/core';
 import { SearchIssueForm, SearchIssueFormDataType } from './SearchIssueForm';
 import { githubSearchQueryBuilder } from '../../utils/githubSearchQueryBuilder';
 import { useTranslation } from 'react-i18next';
-import { DataCypress } from '../../constants/DataCypress';
 import { Error } from '../Error/Error';
-import { IssuesListItem } from './IssuesListItem';
+import { NodeBuilderEdge, validNodeBuilder } from '../../utils/validNodeBuilder';
+import { IssuesList } from './IssuesList';
 
 type SearchIssuesProps = {
     owner: string;
     name: string;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            backgroundColor: theme.palette.background.paper,
-        },
-    }),
-);
-
 export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
     const { t } = useTranslation();
-
-    const classes = useStyles();
 
     const [searchIssues, { loading, error, data, called }] = useSearchGithubIssuesLazyQuery();
 
@@ -53,30 +30,15 @@ export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
         renderElement = <LinearProgress color="secondary" />;
     } else if (called && !loading && error) {
         renderElement = <Error error={error} />;
-    } else if (called && !loading && !error && data?.search.edges?.length) {
-        renderElement = (
-            <>
-                <Box paddingBottom={1} paddingLeft={2}>
-                    <Typography variant="h5">{t('issues.issuesFound')}</Typography>
-                </Box>
-                <Box boxShadow={2}>
-                    <List className={classes.root} disablePadding={true} data-cy={DataCypress.SearchIssuesList}>
-                        {data.search.edges.map((result, i) => {
-                            return result?.node && result.node.__typename === 'Issue' ? (
-                                <>
-                                    <IssuesListItem item={result.node} />
-                                    {data.search.edges?.length !== i + 1 && <Divider component="li" />}
-                                </>
-                            ) : (
-                                <></>
-                            );
-                        })}
-                    </List>
-                </Box>
-            </>
+    } else if (called && !loading && !error && data?.search.edges) {
+        const issuesList = validNodeBuilder<SearchGithubIssueItemFragment>(
+            data.search.edges as NodeBuilderEdge<SearchGithubIssueItemFragment>[],
+            'Issue',
         );
-    } else if (called && !loading && !error && !data?.search.edges?.length) {
-        renderElement = (
+
+        renderElement = issuesList.length ? (
+            <IssuesList items={issuesList} />
+        ) : (
             <Box paddingBottom={1} paddingLeft={2}>
                 <Typography variant="h5">{t('issues.noIssuesFound')}</Typography>
             </Box>
