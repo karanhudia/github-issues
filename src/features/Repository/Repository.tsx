@@ -16,7 +16,7 @@ export const Repository = () => {
     });
 
     if (loading) return <LinearProgress color="secondary" />;
-    if (error) return <Error />;
+    if (error) return <Error error={error} />;
 
     return (
         <Grid container spacing={2}>

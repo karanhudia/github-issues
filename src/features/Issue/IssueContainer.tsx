@@ -43,7 +43,7 @@ export const IssueContainer = () => {
     });
 
     if (loading) return <LinearProgress color="secondary" />;
-    if (error) return <Error />;
+    if (error) return <Error error={error} />;
 
     if (!data?.repository?.issue) {
         return null;

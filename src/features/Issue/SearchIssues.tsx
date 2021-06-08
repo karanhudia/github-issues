@@ -52,7 +52,7 @@ export const SearchIssues = ({ owner, name }: SearchIssuesProps) => {
     if (called && loading) {
         renderElement = <LinearProgress color="secondary" />;
     } else if (called && !loading && error) {
-        renderElement = <Error />;
+        renderElement = <Error error={error} />;
     } else if (called && !loading && !error && data?.search.edges?.length) {
         renderElement = (
             <>
